@@ -3,7 +3,7 @@ from rest_framework import viewsets , generics
 from product.serializers import ProductSerializer
 from product.models import Product
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from utils.custom_perm import IsAdmin, IsCustomer, IsVendor
 
@@ -13,7 +13,7 @@ from drf_spectacular.utils import extend_schema
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 
@@ -37,3 +37,10 @@ class CustomerProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsCustomer]
+
+
+
+from django.views import generic
+
+class HomePageView(generic.TemplateView):
+    template_name = "index.html"
