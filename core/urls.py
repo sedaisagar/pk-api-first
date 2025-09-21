@@ -11,10 +11,12 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from product.views import HomePageView
+from product.views import HomePageView, EsewaSuccesView, EsewaFailureView
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
+    path("esewa-success/", EsewaSuccesView.as_view(), name="esewa-success"),
+    path("esewa-failure/", EsewaFailureView.as_view(), name="esewa-failure"),
     path("admin/", admin.site.urls),
     path(
         "api/",

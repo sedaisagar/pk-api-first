@@ -44,3 +44,9 @@ from django.views import generic
 
 class HomePageView(generic.TemplateView):
     template_name = "index.html"
+
+class EsewaSuccesView(generic.TemplateView):
+    template_name = "esewa_success.html"    
+
+class EsewaFailureView(generic.TemplateView):   
+    template_name = "esewa_failure.html"

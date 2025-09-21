@@ -13,7 +13,6 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = "__all__"
 
-
     def generate_signature(self, total_amount, transaction_uuid, product_code="EPAYTEST"):
         parameters = f"total_amount={total_amount:.2f},transaction_uuid={transaction_uuid},product_code={product_code}".encode('utf-8')
         secret = '8gBm/:&EnhH.1/q'.encode('utf-8')
@@ -26,8 +25,24 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance:Product):
         data =  super().to_representation(instance) 
-        transaction_uuid = f"{instance.id}-" + str(int(time.time()))
+        transaction_uuid = f"{instance.id}-" + str(int(time.time())) # This is unique in every cases
         signature = self.generate_signature(instance.price,transaction_uuid)
         data["signature"] = signature
         data["transaction_uuid"] = transaction_uuid
         return data
+    
+
+    # a => b => c =>  d => e
+
+    # inst = Product()
+
+    # # title, price, description, image
+    # data = {
+    #     "id": inst.id,
+    #     "title": inst.title,
+    #     "price": inst.price,
+    #     "description": inst.description,
+    #     "image": inst.image.url,
+    #     # "signature": "generated_signature",
+    #     # "transaction_uuid": "generated_uuid"
+    # }
