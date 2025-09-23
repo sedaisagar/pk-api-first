@@ -1,3 +1,6 @@
+import base64
+import json
+from django.shortcuts import redirect
 from rest_framework import viewsets , generics
 
 from product.serializers import ProductSerializer
@@ -8,7 +11,6 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from utils.custom_perm import IsAdmin, IsCustomer, IsVendor
 
 from drf_spectacular.utils import extend_schema
-
 @extend_schema(tags=["Product"])
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -45,8 +47,37 @@ from django.views import generic
 class HomePageView(generic.TemplateView):
     template_name = "index.html"
 
-class EsewaSuccesView(generic.TemplateView):
-    template_name = "esewa_success.html"    
+class PaymentSuccesView(generic.TemplateView):
+    template_name = "success.html"    
 
-class EsewaFailureView(generic.TemplateView):   
-    template_name = "esewa_failure.html"
+    def get(self, request, *args, **kwargs):
+        params = request.GET.dict()
+
+        """In Case Of Khalti We Can Try And Read status in query params"""
+        if "status" in params:
+            if params["status"] == "Completed":
+                # Payment was successful
+                print("Payment completed successfully.")
+                return redirect("payment-success")
+
+            return redirect("payment-failure")
+
+        
+        """In Case Of eSewa We Can Try And Read data in query params"""
+        if "data" in params:
+            data = params["data"]
+            # Further processing can be done here
+            try:
+                decoded_data = json.loads(base64.b64decode(data).decode('utf-8'))
+                if decoded_data.get("status") == "COMPLETE":
+                    print("eSewa Payment completed successfully.")
+                    return redirect("payment-success")
+            except Exception as e:
+                print("Error: Invalid token." ,e )
+
+            return redirect("payment-failure")
+
+        return super().get(request, *args, **kwargs)
+
+class PaymentFailureView(generic.TemplateView):   
+    template_name = "failure.html"
