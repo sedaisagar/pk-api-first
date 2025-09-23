@@ -5,7 +5,7 @@
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    fetch("http://127.0.0.1:8001/api/products/", {method: "GET"})
+    fetch("http://127.0.0.1:8000/api/products/", {method: "GET"})
         .then(response => response.json())
         .then(data => {
             console.log(data);
@@ -31,8 +31,8 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <input type="hidden" id="product_code" name="product_code" value ="EPAYTEST" required>
                                 <input type="hidden" id="product_service_charge" name="product_service_charge" value="0" required>
                                 <input type="hidden" id="product_delivery_charge" name="product_delivery_charge" value="0" required>
-                                <input type="hidden" id="success_url" name="success_url" value="http://localhost:8001/payment-success/" required>
-                                <input type="hidden" id="failure_url" name="failure_url" value="http://localhost:8001/payment-failure/" required>
+                                <input type="hidden" id="success_url" name="success_url" value="http://localhost:8000/payment-success/" required>
+                                <input type="hidden" id="failure_url" name="failure_url" value="http://localhost:8000/payment-failure/" required>
                                 <input type="hidden" id="signed_field_names" name="signed_field_names" value="total_amount,transaction_uuid,product_code" required>
                                 <input type="hidden" id="signature" name="signature" value="${product.signature}" required>
                                 <button type="submit" class="btn btn-success">Pay with esewa</button>
